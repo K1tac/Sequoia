@@ -1,4 +1,14 @@
+# Build artifacts
 *.o
+*.out
+*.exe
+
+# Binaries
 sequoia
 __sequoia_bin
+
+# Generated files
 __sequoia_out.c
+
+# Misc
+*.log
