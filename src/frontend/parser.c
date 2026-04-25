@@ -88,14 +88,12 @@ AstStmt *parse_stmt(Parser *p) {
             match(p, TOK_SEMI);
             return ast_assign(name_tok.text, expr);
         } else {
-            // Not an assignment, backtrack is not possible, so create expr stmt
             AstExpr *expr = ast_identifier(name_tok.text);
             match(p, TOK_SEMI);
             return ast_expr_stmt(expr);
         }
     }
-    
-    // Otherwise it's an expression statement
+
     AstExpr *expr = parse_expr(p);
     match(p, TOK_SEMI);
     return ast_expr_stmt(expr);

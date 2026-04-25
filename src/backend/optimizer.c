@@ -18,8 +18,7 @@ static AstExpr *optimize_expr(AstExpr *expr) {
             
             expr->data.binary.left = left;
             expr->data.binary.right = right;
-            
-            // Only do constant folding if both sides are literals
+
             if (left && right && left->kind == EXPR_LITERAL && right->kind == EXPR_LITERAL) {
                 int lval = atoi(left->data.literal.value);
                 int rval = atoi(right->data.literal.value);
@@ -34,8 +33,7 @@ static AstExpr *optimize_expr(AstExpr *expr) {
                 
                 char buf[32];
                 snprintf(buf, sizeof(buf), "%d", result);
-                
-                // Don't free children - they're already included in expr
+
                 expr->kind = EXPR_LITERAL;
                 free(expr->data.binary.left->data.literal.value);
                 free(expr->data.binary.left);

@@ -78,7 +78,6 @@ void generate(AstStmt *stmt) {
     
     fclose(out);
     
-    // Compile the generated code
     int ret = system("gcc -o __sequoia_bin __sequoia_out.c 2>/dev/null");
     if (ret == 0) {
         printf("Compiled successfully. Running...\n");
