@@ -42,10 +42,6 @@ static int scope_contains(const Scope *scope, const char *name) {
 }
 
 static void scope_add(Scope *scope, const char *name) {
-    if (scope_contains(scope, name)) {
-        return;
-    }
-
     if (scope->count == scope->capacity) {
         int new_capacity = scope->capacity == 0 ? 16 : scope->capacity * 2;
         scope->names = realloc(scope->names, sizeof(char *) * new_capacity);
@@ -73,6 +69,22 @@ static void emit_decl(FILE *out, Scope *scope, const char *name, int indent) {
     scope_add(scope, name);
     emit_indent(out, indent);
     fprintf(out, "int %s;\n", name);
+}
+
+static int expr_is_simple(const AstExpr *expr) {
+    if (!expr) {
+        return 0;
+    }
+
+    return expr->kind == EXPR_LITERAL || expr->kind == EXPR_IDENTIFIER;
+}
+
+static void emit_simple_expr(FILE *out, const AstExpr *expr) {
+    if (expr->kind == EXPR_LITERAL) {
+        fputs(expr->data.literal.value, out);
+    } else if (expr->kind == EXPR_IDENTIFIER) {
+        fputs(expr->data.identifier.name, out);
+    }
 }
 
 static void escape_c_string(FILE *out, const char *value) {
@@ -238,6 +250,21 @@ static void gen_call(AstExpr *expr, FILE *out, Scope *scope, const char *dest_va
     fprintf(out, "%s = %s(%s);\n", dest_var, expr->data.call.name, args);
 }
 
+static void gen_value_expr(AstExpr *expr, FILE *out, Scope *scope, int indent, char *buf, size_t size) {
+    if (expr_is_simple(expr)) {
+        if (expr->kind == EXPR_LITERAL) {
+            snprintf(buf, size, "%s", expr->data.literal.value);
+        } else {
+            snprintf(buf, size, "%s", expr->data.identifier.name);
+        }
+        return;
+    }
+
+    next_temp(buf, size);
+    emit_decl(out, scope, buf, indent);
+    gen_expr(expr, out, scope, buf, indent);
+}
+
 static void gen_expr(AstExpr *expr, FILE *out, Scope *scope, const char *dest_var, int indent) {
     if (!expr) {
         return;
@@ -264,14 +291,8 @@ static void gen_expr(AstExpr *expr, FILE *out, Scope *scope, const char *dest_va
             char left_var[32];
             char right_var[32];
 
-            next_temp(left_var, sizeof(left_var));
-            next_temp(right_var, sizeof(right_var));
-
-            emit_decl(out, scope, left_var, indent);
-            emit_decl(out, scope, right_var, indent);
-
-            gen_expr(expr->data.binary.left, out, scope, left_var, indent);
-            gen_expr(expr->data.binary.right, out, scope, right_var, indent);
+            gen_value_expr(expr->data.binary.left, out, scope, indent, left_var, sizeof(left_var));
+            gen_value_expr(expr->data.binary.right, out, scope, indent, right_var, sizeof(right_var));
 
             emit_indent(out, indent);
             fprintf(out, "%s = %s %s %s;\n",
@@ -284,9 +305,7 @@ static void gen_expr(AstExpr *expr, FILE *out, Scope *scope, const char *dest_va
 
         case EXPR_UNARY: {
             char operand_var[32];
-            next_temp(operand_var, sizeof(operand_var));
-            emit_decl(out, scope, operand_var, indent);
-            gen_expr(expr->data.unary.operand, out, scope, operand_var, indent);
+            gen_value_expr(expr->data.unary.operand, out, scope, indent, operand_var, sizeof(operand_var));
 
             emit_indent(out, indent);
             if (expr->data.unary.op == OP_NEG) {
@@ -381,6 +400,14 @@ static void gen_stmt(AstStmt *stmt, FILE *out, Scope *scope, int indent) {
 
         case STMT_RETURN:
             if (stmt->data.ret) {
+                if (expr_is_simple(stmt->data.ret)) {
+                    emit_indent(out, indent);
+                    fputs("return ", out);
+                    emit_simple_expr(out, stmt->data.ret);
+                    fputs(";\n", out);
+                    break;
+                }
+
                 char ret_var[32];
                 next_temp(ret_var, sizeof(ret_var));
                 emit_decl(out, scope, ret_var, indent);
