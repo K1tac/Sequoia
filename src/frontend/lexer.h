@@ -3,6 +3,7 @@
 
 typedef enum {
     TOK_INT,
+    TOK_STRING,
     TOK_IDENT,
     TOK_PLUS,
     TOK_MINUS,
@@ -12,6 +13,20 @@ typedef enum {
     TOK_SEMI,
     TOK_LPAREN,
     TOK_RPAREN,
+    TOK_LBRACE,
+    TOK_RBRACE,
+    TOK_COMMA,
+    TOK_LT,
+    TOK_GT,
+    TOK_LE,
+    TOK_GE,
+    TOK_EQ,
+    TOK_NE,
+    TOK_PRINT,
+    TOK_FUNC,
+    TOK_RETURN,
+    TOK_IF,
+    TOK_ELSE,
     TOK_EOF
 } TokenType;
 

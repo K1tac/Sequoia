@@ -1,0 +1,111 @@
+func factorial(n) {
+    if (n <= 1) {
+        return 1;
+    }
+    result = n * factorial(n - 1);
+    return result;
+}
+
+// Function to compute the sum from 1 to n
+func sum_to_n(n) {
+    if (n <= 0) {
+        return 0;
+    }
+    return n + sum_to_n(n - 1);
+}
+
+// Function to calculate area of rectangle
+func rectangle_area(width, height) {
+    return width * height;
+}
+
+// Function to check if number is even
+func is_even(num) {
+    remainder = num / 2;
+    if (remainder * 2 == num) {
+        return 1;
+    }
+    return 0;
+}
+
+// Main program
+print "=== Sequoia Language Test Program ===";
+print "";
+
+// Test 1: Basic arithmetic
+print "Test 1: Basic Arithmetic";
+a = 10;
+b = 5;
+print "a = " a;
+print "b = " b;
+print "a + b = " a + b;
+print "a - b = " a - b;
+print "a * b = " a * b;
+print "a / b = " a / b;
+print "";
+
+// Test 2: Operator precedence
+print "Test 2: Operator Precedence";
+result = 2 + 3 * 4;
+print "2 + 3 * 4 = " result;
+result = (2 + 3) * 4;
+print "(2 + 3) * 4 = " result;
+print "";
+
+// Test 3: Variables and assignments
+print "Test 3: Variable Assignments";
+x = 100;
+y = x + 50;
+z = x * y;
+print "x = " x;
+print "y = " y;
+print "z = " z;
+print "";
+
+// Test 4: Function calls - Factorial
+print "Test 4: Factorial Function";
+fact5 = factorial(5);
+print "factorial(5) = " fact5;
+print "";
+
+// Test 5: Function calls - Sum
+print "Test 5: Sum Function (1 to 10)";
+total = sum_to_n(10);
+print "sum_to_n(10) = " total;
+print "";
+
+// Test 6: Function with multiple parameters
+print "Test 6: Rectangle Area";
+width = 12;
+height = 8;
+area = rectangle_area(width, height);
+print "Rectangle " width " x " height " = " area;
+print "";
+
+// Test 7: Conditional logic
+print "Test 7: Conditional Logic";
+num = 42;
+is_num_even = is_even(num);
+print "is_even(42) = " is_num_even;
+num2 = 15;
+is_num2_even = is_even(num2);
+print "is_even(15) = " is_num2_even;
+print "";
+
+// Test 8: Complex expression
+print "Test 8: Complex Expression";
+p = 3;
+q = 4;
+r = 5;
+result = p * p + q * q;
+print "3^2 + 4^2 = " result;
+print "";
+
+// Test 9: Nested function calls
+print "Test 9: Nested Function Calls";
+nested_result = factorial(4);
+print "factorial(4) = " nested_result;
+print "";
+
+// Test 10: Summary
+print "=== Tests Complete ===";

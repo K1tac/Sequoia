@@ -36,16 +36,17 @@ int main(int argc, char **argv) {
     Lexer *lexer = lexer_new(src);
     Parser *parser = parser_new(lexer);
 
-    AstStmt *stmt = parse_stmt(parser);
+    Program *prog = parse_program(parser);
 
-    if (stmt) {
-        optimize(stmt);
-        generate(stmt);
-        ast_free_stmt(stmt);
+    if (prog) {
+        for (int i = 0; i < prog->count; i++) {
+            optimize(prog->stmts[i]);
+        }
+        generate(prog);
+        program_free(prog);
     }
 
     parser_free(parser);
-    lexer_free(lexer);
     free(src);
 
     return 0;

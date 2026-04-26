@@ -19,8 +19,35 @@ char advance(Lexer *l) {
     return l->src[l->pos++];
 }
 
+TokenType check_keyword(const char *txt) {
+    if (strcmp(txt, "print") == 0) return TOK_PRINT;
+    if (strcmp(txt, "func") == 0) return TOK_FUNC;
+    if (strcmp(txt, "return") == 0) return TOK_RETURN;
+    if (strcmp(txt, "if") == 0) return TOK_IF;
+    if (strcmp(txt, "else") == 0) return TOK_ELSE;
+    return TOK_IDENT;
+}
+
 Token next_token(Lexer *l) {
     while (isspace(peek(l))) advance(l);
+    
+    if (peek(l) == '/' && l->src[l->pos + 1] == '/') {
+        while (peek(l) != '\n' && peek(l) != '\0') advance(l);
+        return next_token(l);
+    }
+    
+    if (peek(l) == '/' && l->src[l->pos + 1] == '*') {
+        advance(l);
+        advance(l);
+        while (!(peek(l) == '*' && l->src[l->pos + 1] == '/') && peek(l) != '\0') {
+            advance(l);
+        }
+        if (peek(l) == '*') {
+            advance(l);
+            advance(l);
+        }
+        return next_token(l);
+    }
 
     char c = peek(l);
 
@@ -32,12 +59,26 @@ Token next_token(Lexer *l) {
         return make(TOK_INT, buf);
     }
 
-    if (isalpha(c)) {
+    if (c == '"') {
+        advance(l);
+        int start = l->pos;
+        while (peek(l) != '"' && peek(l) != '\0') {
+            if (peek(l) == '\\') advance(l);
+            advance(l);
+        }
+        int len = l->pos - start;
+        char *buf = strndup(l->src + start, len);
+        if (peek(l) == '"') advance(l);
+        return make(TOK_STRING, buf);
+    }
+
+    if (isalpha(c) || c == '_') {
         int start = l->pos;
         while (isalnum(peek(l)) || peek(l) == '_') advance(l);
         int len = l->pos - start;
         char *buf = strndup(l->src + start, len);
-        return make(TOK_IDENT, buf);
+        TokenType type = check_keyword(buf);
+        return make(type, buf);
     }
 
     switch (c) {
@@ -45,10 +86,40 @@ Token next_token(Lexer *l) {
         case '-': advance(l); return make(TOK_MINUS, "-");
         case '*': advance(l); return make(TOK_STAR, "*");
         case '/': advance(l); return make(TOK_SLASH, "/");
-        case '=': advance(l); return make(TOK_EQUAL, "=");
+        case '=': 
+            advance(l);
+            if (peek(l) == '=') {
+                advance(l);
+                return make(TOK_EQ, "==");
+            }
+            return make(TOK_EQUAL, "=");
         case ';': advance(l); return make(TOK_SEMI, ";");
         case '(': advance(l); return make(TOK_LPAREN, "(");
         case ')': advance(l); return make(TOK_RPAREN, ")");
+        case '{': advance(l); return make(TOK_LBRACE, "{");
+        case '}': advance(l); return make(TOK_RBRACE, "}");
+        case ',': advance(l); return make(TOK_COMMA, ",");
+        case '<':
+            advance(l);
+            if (peek(l) == '=') {
+                advance(l);
+                return make(TOK_LE, "<=");
+            }
+            return make(TOK_LT, "<");
+        case '>':
+            advance(l);
+            if (peek(l) == '=') {
+                advance(l);
+                return make(TOK_GE, ">=");
+            }
+            return make(TOK_GT, ">");
+        case '!':
+            advance(l);
+            if (peek(l) == '=') {
+                advance(l);
+                return make(TOK_NE, "!=");
+            }
+            return make(TOK_EOF, "");
         case '\0': return make(TOK_EOF, "");
         default: advance(l); return make(TOK_EOF, "");
     }

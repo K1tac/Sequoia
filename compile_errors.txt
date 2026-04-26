@@ -1,0 +1,273 @@
+__sequoia_out.c: In function ‘factorial’:
+__sequoia_out.c:4:9: error: ‘cond_0’ undeclared (first use in this function)
+    4 |     if (cond_0) {
+      |         ^~~~~~
+__sequoia_out.c:4:9: note: each undeclared identifier is reported only once for each function it appears in
+__sequoia_out.c:11:12: error: ‘ret_val’ undeclared (first use in this function)
+   11 |     return ret_val;
+      |            ^~~~~~~
+__sequoia_out.c:20:9: error: expected expression before ‘int’
+   20 |         int arg0;
+      |         ^~~
+__sequoia_out.c: In function ‘sum_to_n’:
+__sequoia_out.c:36:9: error: ‘cond_7’ undeclared (first use in this function)
+   36 |     if (cond_7) {
+      |         ^~~~~~
+__sequoia_out.c:43:12: error: ‘ret_val’ undeclared (first use in this function)
+   43 |     return ret_val;
+      |            ^~~~~~~
+__sequoia_out.c:53:9: error: expected expression before ‘int’
+   53 |         int arg0;
+      |         ^~~
+__sequoia_out.c: In function ‘rectangle_area’:
+__sequoia_out.c:65:12: error: ‘ret_val’ undeclared (first use in this function)
+   65 |     return ret_val;
+      |            ^~~~~~~
+__sequoia_out.c: In function ‘is_even’:
+__sequoia_out.c:83:9: error: ‘cond_18’ undeclared (first use in this function)
+   83 |     if (cond_18) {
+      |         ^~~~~~~
+__sequoia_out.c:94:12: error: ‘ret_val’ undeclared (first use in this function)
+   94 |     return ret_val;
+      |            ^~~~~~~
+__sequoia_out.c: In function ‘main’:
+__sequoia_out.c:106:9: error: expected expression before ‘int’
+  106 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:110:9: error: expected expression before ‘int’
+  110 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:125:9: error: redeclaration of ‘result’ with no linkage
+  125 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:121:9: note: previous declaration of ‘result’ with type ‘int’
+  121 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:129:9: error: redeclaration of ‘result’ with no linkage
+  129 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:125:9: note: previous declaration of ‘result’ with type ‘int’
+  125 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:132:9: error: redeclaration of ‘result’ with no linkage
+  132 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:129:9: note: previous declaration of ‘result’ with type ‘int’
+  129 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:140:9: error: redeclaration of ‘result’ with no linkage
+  140 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:132:9: note: previous declaration of ‘result’ with type ‘int’
+  132 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:143:9: error: redeclaration of ‘result’ with no linkage
+  143 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:140:9: note: previous declaration of ‘result’ with type ‘int’
+  140 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:151:9: error: redeclaration of ‘result’ with no linkage
+  151 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:143:9: note: previous declaration of ‘result’ with type ‘int’
+  143 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:154:9: error: redeclaration of ‘result’ with no linkage
+  154 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:151:9: note: previous declaration of ‘result’ with type ‘int’
+  151 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:162:9: error: redeclaration of ‘result’ with no linkage
+  162 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:154:9: note: previous declaration of ‘result’ with type ‘int’
+  154 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:165:9: error: redeclaration of ‘result’ with no linkage
+  165 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:162:9: note: previous declaration of ‘result’ with type ‘int’
+  162 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:173:9: error: expected expression before ‘int’
+  173 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:177:9: error: redeclaration of ‘result’ with no linkage
+  177 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:165:9: note: previous declaration of ‘result’ with type ‘int’
+  165 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:189:9: error: expected expression before ‘int’
+  189 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:192:9: error: redeclaration of ‘result’ with no linkage
+  192 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:177:9: note: previous declaration of ‘result’ with type ‘int’
+  177 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:195:9: error: redeclaration of ‘result’ with no linkage
+  195 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:192:9: note: previous declaration of ‘result’ with type ‘int’
+  192 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:207:9: error: expected expression before ‘int’
+  207 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:210:9: error: redeclaration of ‘result’ with no linkage
+  210 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:195:9: note: previous declaration of ‘result’ with type ‘int’
+  195 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:214:9: error: expected expression before ‘int’
+  214 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:236:9: error: redeclaration of ‘result’ with no linkage
+  236 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:210:9: note: previous declaration of ‘result’ with type ‘int’
+  210 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:240:9: error: redeclaration of ‘result’ with no linkage
+  240 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:236:9: note: previous declaration of ‘result’ with type ‘int’
+  236 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:244:9: error: redeclaration of ‘result’ with no linkage
+  244 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:240:9: note: previous declaration of ‘result’ with type ‘int’
+  240 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:248:9: error: expected expression before ‘int’
+  248 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:254:9: error: expected expression before ‘int’
+  254 |         int arg0;
+      |         ^~~
+__sequoia_out.c:259:9: error: redeclaration of ‘result’ with no linkage
+  259 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:244:9: note: previous declaration of ‘result’ with type ‘int’
+  244 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:263:9: error: expected expression before ‘int’
+  263 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:269:9: error: expected expression before ‘int’
+  269 |         int arg0;
+      |         ^~~
+__sequoia_out.c:274:9: error: redeclaration of ‘result’ with no linkage
+  274 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:259:9: note: previous declaration of ‘result’ with type ‘int’
+  259 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:278:9: error: expected expression before ‘int’
+  278 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:290:9: error: expected expression before ‘int’
+  290 |         int arg0;
+      |         ^~~
+__sequoia_out.c:289:12: error: too few arguments to function ‘rectangle_area’; expected 2, have 1
+  289 |     area = rectangle_area(
+      |            ^~~~~~~~~~~~~~
+__sequoia_out.c:64:5: note: declared here
+   64 | int rectangle_area(int width, int height) {
+      |     ^~~~~~~~~~~~~~
+__sequoia_out.c:298:9: error: redeclaration of ‘result’ with no linkage
+  298 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:274:9: note: previous declaration of ‘result’ with type ‘int’
+  274 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:301:9: error: redeclaration of ‘result’ with no linkage
+  301 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:298:9: note: previous declaration of ‘result’ with type ‘int’
+  298 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:304:9: error: redeclaration of ‘result’ with no linkage
+  304 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:301:9: note: previous declaration of ‘result’ with type ‘int’
+  301 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:307:9: error: redeclaration of ‘result’ with no linkage
+  307 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:304:9: note: previous declaration of ‘result’ with type ‘int’
+  304 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:308:15: error: expected expression before ‘=’ token
+  308 |     result =  = ;
+      |               ^
+__sequoia_out.c:310:9: error: redeclaration of ‘result’ with no linkage
+  310 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:307:9: note: previous declaration of ‘result’ with type ‘int’
+  307 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:314:9: error: expected expression before ‘int’
+  314 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:323:9: error: expected expression before ‘int’
+  323 |         int arg0;
+      |         ^~~
+__sequoia_out.c:328:9: error: redeclaration of ‘result’ with no linkage
+  328 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:310:9: note: previous declaration of ‘result’ with type ‘int’
+  310 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:336:9: error: expected expression before ‘int’
+  336 |         int arg0;
+      |         ^~~
+__sequoia_out.c:341:9: error: redeclaration of ‘result’ with no linkage
+  341 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:328:9: note: previous declaration of ‘result’ with type ‘int’
+  328 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:345:9: error: expected expression before ‘int’
+  345 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:358:9: error: redeclaration of ‘result’ with no linkage
+  358 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:341:9: note: previous declaration of ‘result’ with type ‘int’
+  341 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:374:9: error: expected expression before ‘int’
+  374 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:377:9: error: redeclaration of ‘result’ with no linkage
+  377 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:358:9: note: previous declaration of ‘result’ with type ‘int’
+  358 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:381:9: error: expected expression before ‘int’
+  381 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:387:9: error: expected expression before ‘int’
+  387 |         int arg0;
+      |         ^~~
+__sequoia_out.c:392:9: error: redeclaration of ‘result’ with no linkage
+  392 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:377:9: note: previous declaration of ‘result’ with type ‘int’
+  377 |     int result;
+      |         ^~~~~~
+__sequoia_out.c:396:9: error: expected expression before ‘int’
+  396 |         int print_var0;
+      |         ^~~
+__sequoia_out.c:400:9: error: expected expression before ‘int’
+  400 |         int print_var0;
+      |         ^~~
