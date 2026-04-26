@@ -1,0 +1,10 @@
+// this is the first input test.
+
+print "num1: ";
+num1 = input();
+
+print "num2: ";
+num2 = input();
+
+result = num1 + num2;
+print "result: " result;

@@ -125,6 +125,40 @@ static void gen_expr(AstExpr *expr, FILE *out, Scope *scope, const char *dest_va
 static void gen_call(AstExpr *expr, FILE *out, Scope *scope, const char *dest_var, int indent) {
     char args[1024] = {0};
 
+    if (strcmp(expr->data.call.name, "input") == 0) {
+        if (expr->data.call.arg_count > 1) {
+            emit_indent(out, indent);
+            fprintf(out, "%s = 0;\n", dest_var);
+            return;
+        }
+
+        if (expr->data.call.arg_count == 1) {
+            AstExpr *prompt = expr->data.call.args[0];
+
+            if (prompt->kind != EXPR_STRING_LITERAL) {
+                emit_indent(out, indent);
+                fprintf(out, "%s = 0;\n", dest_var);
+                return;
+            }
+
+            emit_indent(out, indent);
+            fputs("printf(\"", out);
+            escape_c_string(out, prompt->data.str_literal.str_value);
+            fputs("\");\n", out);
+
+            emit_indent(out, indent);
+            fputs("fflush(stdout);\n", out);
+        }
+
+        emit_indent(out, indent);
+        fprintf(out, "if (scanf(\"%%d\", &%s) != 1) {\n", dest_var);
+        emit_indent(out, indent + 1);
+        fprintf(out, "%s = 0;\n", dest_var);
+        emit_indent(out, indent);
+        fputs("}\n", out);
+        return;
+    }
+
     for (int i = 0; i < expr->data.call.arg_count; i++) {
         char arg_var[32];
         next_temp(arg_var, sizeof(arg_var));
