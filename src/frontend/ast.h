@@ -17,6 +17,7 @@ typedef enum {
     STMT_RETURN,
     STMT_FUNC_DEF,
     STMT_IF,
+    STMT_WHILE,
     STMT_BLOCK
 } StmtKind;
 
@@ -77,6 +78,12 @@ typedef struct {
     int else_count;
 } IfStmt;
 
+typedef struct {
+    AstExpr *cond;
+    AstStmt **body;
+    int body_count;
+} WhileStmt;
+
 struct AstStmt {
     StmtKind kind;
     union {
@@ -92,6 +99,7 @@ struct AstStmt {
         AstExpr *ret;
         FuncDef func;
         IfStmt if_stmt;
+        WhileStmt while_stmt;
         struct {
             AstStmt **stmts;
             int stmt_count;
@@ -111,6 +119,7 @@ AstStmt *ast_print(AstExpr **exprs, int expr_count);
 AstStmt *ast_return(AstExpr *expr);
 AstStmt *ast_func_def(const char *name, char **params, int param_count, AstStmt **body, int body_count);
 AstStmt *ast_if(AstExpr *cond, AstStmt **then_body, int then_count, AstStmt **else_body, int else_count);
+AstStmt *ast_while(AstExpr *cond, AstStmt **body, int body_count);
 AstStmt *ast_block(AstStmt **stmts, int stmt_count);
 
 void ast_free_expr(AstExpr *e);

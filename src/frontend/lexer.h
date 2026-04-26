@@ -27,6 +27,7 @@ typedef enum {
     TOK_RETURN,
     TOK_IF,
     TOK_ELSE,
+    TOK_WHILE,
     TOK_EOF
 } TokenType;
 

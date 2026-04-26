@@ -9,6 +9,7 @@ Sequoia is a small language that compiles to C, builds the generated program wit
 - `print` statements with strings and values
 - User-defined functions with parameters and `return`
 - `if` / `else` conditionals
+- `while` loops
 - Builtin `input(...)` for integer input
 - Builtin `rng(...)` for random integers
 - Constant folding in the optimizer
@@ -51,6 +52,12 @@ if (guess == value) {
 } else {
     print "The number was " value;
 }
+
+count = 0;
+while (count < 3) {
+    print count;
+    count = count + 1;
+}
 ```
 
 ### Builtins
@@ -83,4 +90,4 @@ tests/                   sample Sequoia programs
 
 - All runtime values are integers.
 - Strings are currently for `print` and `input` prompts.
-- There are no loop statements yet, so repeated behavior is typically written with recursion.
+- Loops are currently written as `while (...) { ... }`.

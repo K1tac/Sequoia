@@ -87,6 +87,21 @@ if (guess < target) {
 
 Conditions use integer truthiness: `0` is false, nonzero is true.
 
+## Loops
+
+Sequoia supports `while` loops.
+
+```seq
+count = 0;
+
+while (count < 3) {
+    print count;
+    count = count + 1;
+}
+```
+
+The condition is evaluated before each iteration.
+
 ## Builtins
 
 ### `input`
@@ -133,30 +148,39 @@ Multi-line comments:
 ## Example: Number Guesser
 
 ```seq
-func play(secret, attempts) {
-    guess = input("Guess a number between 1 and 10: ");
-
-    if (guess == secret) {
-        print "You got it in " attempts " tries!";
-        return 0;
-    }
-
-    if (guess < secret) {
-        print "Too low.";
-    } else {
-        print "Too high.";
-    }
-
-    return play(secret, attempts + 1);
-}
+print "=== Number Guesser ===";
+print "I'm thinking of a number between 1 and 10.";
+print "Enter 0 to quit.";
 
 secret = rng(1, 10);
-game_status = play(secret, 1);
+attempts = 1;
+playing = 1;
+
+while (playing == 1) {
+    guess = input("Guess a number between 1 and 10: ");
+
+    if (guess == 0) {
+        print "Game ended.";
+        playing = 0;
+    } else {
+        if (guess == secret) {
+            print "You got it in " attempts " tries!";
+            playing = 0;
+        } else {
+            if (guess < secret) {
+                print "Too low.";
+            } else {
+                print "Too high.";
+            }
+
+            attempts = attempts + 1;
+        }
+    }
+}
 ```
 
 ## Current Limits
 
 - Integers only
 - Strings are not first-class values
-- No loops yet
 - No arrays or floating-point values

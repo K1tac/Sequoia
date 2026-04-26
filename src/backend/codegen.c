@@ -427,6 +427,31 @@ static void gen_stmt(AstStmt *stmt, FILE *out, Scope *scope, int indent) {
             break;
         }
 
+        case STMT_WHILE: {
+            char cond_var[32];
+            next_temp(cond_var, sizeof(cond_var));
+            emit_decl(out, scope, cond_var, indent);
+
+            emit_indent(out, indent);
+            fputs("while (1) {\n", out);
+
+            gen_expr(stmt->data.while_stmt.cond, out, scope, cond_var, indent + 1);
+            emit_indent(out, indent + 1);
+            fprintf(out, "if (!%s) {\n", cond_var);
+            emit_indent(out, indent + 2);
+            fputs("break;\n", out);
+            emit_indent(out, indent + 1);
+            fputs("}\n", out);
+
+            for (int i = 0; i < stmt->data.while_stmt.body_count; i++) {
+                gen_stmt(stmt->data.while_stmt.body[i], out, scope, indent + 1);
+            }
+
+            emit_indent(out, indent);
+            fputs("}\n", out);
+            break;
+        }
+
         case STMT_BLOCK:
             for (int i = 0; i < stmt->data.block.stmt_count; i++) {
                 gen_stmt(stmt->data.block.stmts[i], out, scope, indent);

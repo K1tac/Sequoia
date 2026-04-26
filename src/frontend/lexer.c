@@ -25,6 +25,7 @@ TokenType check_keyword(const char *txt) {
     if (strcmp(txt, "return") == 0) return TOK_RETURN;
     if (strcmp(txt, "if") == 0) return TOK_IF;
     if (strcmp(txt, "else") == 0) return TOK_ELSE;
+    if (strcmp(txt, "while") == 0) return TOK_WHILE;
     return TOK_IDENT;
 }
 

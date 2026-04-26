@@ -94,6 +94,15 @@ AstStmt *ast_if(AstExpr *cond, AstStmt **then_body, int then_count, AstStmt **el
     return s;
 }
 
+AstStmt *ast_while(AstExpr *cond, AstStmt **body, int body_count) {
+    AstStmt *s = malloc(sizeof(AstStmt));
+    s->kind = STMT_WHILE;
+    s->data.while_stmt.cond = cond;
+    s->data.while_stmt.body = body;
+    s->data.while_stmt.body_count = body_count;
+    return s;
+}
+
 AstStmt *ast_block(AstStmt **stmts, int stmt_count) {
     AstStmt *s = malloc(sizeof(AstStmt));
     s->kind = STMT_BLOCK;
@@ -186,6 +195,15 @@ void ast_free_stmt(AstStmt *s) {
                     ast_free_stmt(s->data.if_stmt.else_body[i]);
                 }
                 free(s->data.if_stmt.else_body);
+            }
+            break;
+        case STMT_WHILE:
+            ast_free_expr(s->data.while_stmt.cond);
+            if (s->data.while_stmt.body) {
+                for (int i = 0; i < s->data.while_stmt.body_count; i++) {
+                    ast_free_stmt(s->data.while_stmt.body[i]);
+                }
+                free(s->data.while_stmt.body);
             }
             break;
         case STMT_BLOCK:

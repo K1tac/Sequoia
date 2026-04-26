@@ -274,6 +274,23 @@ AstStmt *parse_stmt(Parser *p) {
         
         return ast_if(cond, then_body, then_count, else_body, else_count);
     }
+
+    if (match(p, TOK_WHILE)) {
+        if (!match(p, TOK_LPAREN)) {
+            return ast_expr_stmt(ast_literal("0"));
+        }
+
+        AstExpr *cond = parse_expr(p);
+        if (!match(p, TOK_RPAREN)) {
+            ast_free_expr(cond);
+            return ast_expr_stmt(ast_literal("0"));
+        }
+
+        int body_count = 0;
+        AstStmt **body = parse_block(p, &body_count);
+
+        return ast_while(cond, body, body_count);
+    }
     
     if (check(p, TOK_IDENT)) {
         Token name_tok = p->current;
