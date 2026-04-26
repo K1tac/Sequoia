@@ -33,6 +33,14 @@ AstExpr *ast_binary(AstExpr *l, Operator op, AstExpr *r) {
     return e;
 }
 
+AstExpr *ast_unary(Operator op, AstExpr *operand) {
+    AstExpr *e = malloc(sizeof(AstExpr));
+    e->kind = EXPR_UNARY;
+    e->data.unary.op = op;
+    e->data.unary.operand = operand;
+    return e;
+}
+
 AstExpr *ast_call(const char *name, AstExpr **args, int arg_count) {
     AstExpr *e = malloc(sizeof(AstExpr));
     e->kind = EXPR_CALL;
@@ -103,6 +111,18 @@ AstStmt *ast_while(AstExpr *cond, AstStmt **body, int body_count) {
     return s;
 }
 
+AstStmt *ast_break(void) {
+    AstStmt *s = malloc(sizeof(AstStmt));
+    s->kind = STMT_BREAK;
+    return s;
+}
+
+AstStmt *ast_continue(void) {
+    AstStmt *s = malloc(sizeof(AstStmt));
+    s->kind = STMT_CONTINUE;
+    return s;
+}
+
 AstStmt *ast_block(AstStmt **stmts, int stmt_count) {
     AstStmt *s = malloc(sizeof(AstStmt));
     s->kind = STMT_BLOCK;
@@ -127,6 +147,9 @@ void ast_free_expr(AstExpr *e) {
         case EXPR_BINARY:
             ast_free_expr(e->data.binary.left);
             ast_free_expr(e->data.binary.right);
+            break;
+        case EXPR_UNARY:
+            ast_free_expr(e->data.unary.operand);
             break;
         case EXPR_CALL:
             free(e->data.call.name);
@@ -205,6 +228,9 @@ void ast_free_stmt(AstStmt *s) {
                 }
                 free(s->data.while_stmt.body);
             }
+            break;
+        case STMT_BREAK:
+        case STMT_CONTINUE:
             break;
         case STMT_BLOCK:
             if (s->data.block.stmts) {

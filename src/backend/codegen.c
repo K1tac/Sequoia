@@ -106,12 +106,15 @@ static const char *op_to_string(Operator op) {
         case OP_SUB: return "-";
         case OP_MUL: return "*";
         case OP_DIV: return "/";
+        case OP_MOD: return "%";
         case OP_LT: return "<";
         case OP_GT: return ">";
         case OP_LE: return "<=";
         case OP_GE: return ">=";
         case OP_EQ: return "==";
         case OP_NE: return "!=";
+        case OP_AND: return "&&";
+        case OP_OR: return "||";
         default: return "+";
     }
 }
@@ -276,6 +279,21 @@ static void gen_expr(AstExpr *expr, FILE *out, Scope *scope, const char *dest_va
                     left_var,
                     op_to_string(expr->data.binary.op),
                     right_var);
+            break;
+        }
+
+        case EXPR_UNARY: {
+            char operand_var[32];
+            next_temp(operand_var, sizeof(operand_var));
+            emit_decl(out, scope, operand_var, indent);
+            gen_expr(expr->data.unary.operand, out, scope, operand_var, indent);
+
+            emit_indent(out, indent);
+            if (expr->data.unary.op == OP_NEG) {
+                fprintf(out, "%s = -%s;\n", dest_var, operand_var);
+            } else {
+                fprintf(out, "%s = !%s;\n", dest_var, operand_var);
+            }
             break;
         }
 
@@ -451,6 +469,16 @@ static void gen_stmt(AstStmt *stmt, FILE *out, Scope *scope, int indent) {
             fputs("}\n", out);
             break;
         }
+
+        case STMT_BREAK:
+            emit_indent(out, indent);
+            fputs("break;\n", out);
+            break;
+
+        case STMT_CONTINUE:
+            emit_indent(out, indent);
+            fputs("continue;\n", out);
+            break;
 
         case STMT_BLOCK:
             for (int i = 0; i < stmt->data.block.stmt_count; i++) {

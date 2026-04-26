@@ -33,7 +33,9 @@ static int is_expr_start(TokenType type) {
     return type == TOK_INT ||
            type == TOK_STRING ||
            type == TOK_IDENT ||
-           type == TOK_LPAREN;
+           type == TOK_LPAREN ||
+           type == TOK_MINUS ||
+           type == TOK_BANG;
 }
 
 static AstExpr *parse_expr(Parser *p);
@@ -90,13 +92,30 @@ static AstExpr *parse_primary(Parser *p) {
     return ast_literal("0");
 }
 
+static AstExpr *parse_unary(Parser *p) {
+    if (match(p, TOK_MINUS)) {
+        return ast_unary(OP_NEG, parse_unary(p));
+    }
+
+    if (match(p, TOK_BANG)) {
+        return ast_unary(OP_NOT, parse_unary(p));
+    }
+
+    return parse_primary(p);
+}
+
 static AstExpr *parse_term(Parser *p) {
-    AstExpr *left = parse_primary(p);
+    AstExpr *left = parse_unary(p);
     
-    while (check(p, TOK_STAR) || check(p, TOK_SLASH)) {
-        Operator op = (p->current.type == TOK_STAR) ? OP_MUL : OP_DIV;
+    while (check(p, TOK_STAR) || check(p, TOK_SLASH) || check(p, TOK_PERCENT)) {
+        Operator op;
+        switch (p->current.type) {
+            case TOK_STAR: op = OP_MUL; break;
+            case TOK_SLASH: op = OP_DIV; break;
+            default: op = OP_MOD; break;
+        }
         advance(p);
-        AstExpr *right = parse_primary(p);
+        AstExpr *right = parse_unary(p);
         left = ast_binary(left, op, right);
     }
     
@@ -119,9 +138,8 @@ static AstExpr *parse_additive(Parser *p) {
 static AstExpr *parse_comparison(Parser *p) {
     AstExpr *left = parse_additive(p);
     
-    if (check(p, TOK_LT) || check(p, TOK_GT) || check(p, TOK_LE) || 
-        check(p, TOK_GE) || check(p, TOK_EQ) || check(p, TOK_NE)) {
-        
+    while (check(p, TOK_LT) || check(p, TOK_GT) || check(p, TOK_LE) ||
+           check(p, TOK_GE) || check(p, TOK_EQ) || check(p, TOK_NE)) {
         Operator op;
         switch (p->current.type) {
             case TOK_LT: op = OP_LT; break;
@@ -140,8 +158,30 @@ static AstExpr *parse_comparison(Parser *p) {
     return left;
 }
 
+static AstExpr *parse_logical_and(Parser *p) {
+    AstExpr *left = parse_comparison(p);
+
+    while (match(p, TOK_AND)) {
+        AstExpr *right = parse_comparison(p);
+        left = ast_binary(left, OP_AND, right);
+    }
+
+    return left;
+}
+
+static AstExpr *parse_logical_or(Parser *p) {
+    AstExpr *left = parse_logical_and(p);
+
+    while (match(p, TOK_OR)) {
+        AstExpr *right = parse_logical_and(p);
+        left = ast_binary(left, OP_OR, right);
+    }
+
+    return left;
+}
+
 static AstExpr *parse_expr(Parser *p) {
-    return parse_comparison(p);
+    return parse_logical_or(p);
 }
 
 static AstStmt **parse_block(Parser *p, int *stmt_count) {
@@ -202,6 +242,16 @@ AstStmt *parse_stmt(Parser *p) {
         }
         match(p, TOK_SEMI);
         return ast_return(expr);
+    }
+
+    if (match(p, TOK_BREAK)) {
+        match(p, TOK_SEMI);
+        return ast_break();
+    }
+
+    if (match(p, TOK_CONTINUE)) {
+        match(p, TOK_SEMI);
+        return ast_continue();
     }
 
     if (match(p, TOK_FUNC)) {

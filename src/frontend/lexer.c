@@ -26,6 +26,8 @@ TokenType check_keyword(const char *txt) {
     if (strcmp(txt, "if") == 0) return TOK_IF;
     if (strcmp(txt, "else") == 0) return TOK_ELSE;
     if (strcmp(txt, "while") == 0) return TOK_WHILE;
+    if (strcmp(txt, "break") == 0) return TOK_BREAK;
+    if (strcmp(txt, "continue") == 0) return TOK_CONTINUE;
     return TOK_IDENT;
 }
 
@@ -87,6 +89,7 @@ Token next_token(Lexer *l) {
         case '-': advance(l); return make(TOK_MINUS, "-");
         case '*': advance(l); return make(TOK_STAR, "*");
         case '/': advance(l); return make(TOK_SLASH, "/");
+        case '%': advance(l); return make(TOK_PERCENT, "%");
         case '=': 
             advance(l);
             if (peek(l) == '=') {
@@ -120,7 +123,21 @@ Token next_token(Lexer *l) {
                 advance(l);
                 return make(TOK_NE, "!=");
             }
-            return make(TOK_EOF, ""); 
+            return make(TOK_BANG, "!");
+        case '&':
+            advance(l);
+            if (peek(l) == '&') {
+                advance(l);
+                return make(TOK_AND, "&&");
+            }
+            return make(TOK_EOF, "");
+        case '|':
+            advance(l);
+            if (peek(l) == '|') {
+                advance(l);
+                return make(TOK_OR, "||");
+            }
+            return make(TOK_EOF, "");
         case '\0': return make(TOK_EOF, "");
         default: advance(l); return make(TOK_EOF, "");
     }

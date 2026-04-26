@@ -37,12 +37,16 @@ static AstExpr *optimize_expr(AstExpr *expr) {
                     case OP_SUB: result = lval - rval; break;
                     case OP_MUL: result = lval * rval; break;
                     case OP_DIV: result = (rval != 0) ? lval / rval : 0; break;
+                    case OP_MOD: result = (rval != 0) ? lval % rval : 0; break;
                     case OP_LT: result = lval < rval; break;
                     case OP_GT: result = lval > rval; break;
                     case OP_LE: result = lval <= rval; break;
                     case OP_GE: result = lval >= rval; break;
                     case OP_EQ: result = lval == rval; break;
                     case OP_NE: result = lval != rval; break;
+                    case OP_AND: result = lval && rval; break;
+                    case OP_OR: result = lval || rval; break;
+                    default: break;
                 }
 
                 ast_free_expr(left);
@@ -52,6 +56,29 @@ static AstExpr *optimize_expr(AstExpr *expr) {
                 return replacement;
             }
             
+            return expr;
+        }
+
+        case EXPR_UNARY: {
+            AstExpr *operand = optimize_expr(expr->data.unary.operand);
+            expr->data.unary.operand = operand;
+
+            if (operand && operand->kind == EXPR_LITERAL) {
+                int value = atoi(operand->data.literal.value);
+                int result = 0;
+
+                switch (expr->data.unary.op) {
+                    case OP_NEG: result = -value; break;
+                    case OP_NOT: result = !value; break;
+                    default: return expr;
+                }
+
+                ast_free_expr(operand);
+                AstExpr *replacement = make_int_literal(result);
+                free(expr);
+                return replacement;
+            }
+
             return expr;
         }
 
@@ -101,6 +128,17 @@ static AstStmt *optimize_stmt(AstStmt *stmt) {
             for (int i = 0; i < stmt->data.if_stmt.else_count; i++) {
                 stmt->data.if_stmt.else_body[i] = optimize_stmt(stmt->data.if_stmt.else_body[i]);
             }
+            return stmt;
+
+        case STMT_WHILE:
+            stmt->data.while_stmt.cond = optimize_expr(stmt->data.while_stmt.cond);
+            for (int i = 0; i < stmt->data.while_stmt.body_count; i++) {
+                stmt->data.while_stmt.body[i] = optimize_stmt(stmt->data.while_stmt.body[i]);
+            }
+            return stmt;
+
+        case STMT_BREAK:
+        case STMT_CONTINUE:
             return stmt;
 
         case STMT_BLOCK:

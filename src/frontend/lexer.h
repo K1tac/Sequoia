@@ -9,6 +9,7 @@ typedef enum {
     TOK_MINUS,
     TOK_STAR,
     TOK_SLASH,
+    TOK_PERCENT,
     TOK_EQUAL,
     TOK_SEMI,
     TOK_LPAREN,
@@ -22,12 +23,17 @@ typedef enum {
     TOK_GE,
     TOK_EQ,
     TOK_NE,
+    TOK_AND,
+    TOK_OR,
+    TOK_BANG,
     TOK_PRINT,
     TOK_FUNC,
     TOK_RETURN,
     TOK_IF,
     TOK_ELSE,
     TOK_WHILE,
+    TOK_BREAK,
+    TOK_CONTINUE,
     TOK_EOF
 } TokenType;
 

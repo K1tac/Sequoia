@@ -5,6 +5,7 @@ typedef enum {
     EXPR_LITERAL,
     EXPR_STRING_LITERAL,
     EXPR_BINARY,
+    EXPR_UNARY,
     EXPR_IDENTIFIER,
     EXPR_CALL,
     EXPR_COMPARISON
@@ -18,6 +19,8 @@ typedef enum {
     STMT_FUNC_DEF,
     STMT_IF,
     STMT_WHILE,
+    STMT_BREAK,
+    STMT_CONTINUE,
     STMT_BLOCK
 } StmtKind;
 
@@ -26,12 +29,17 @@ typedef enum {
     OP_SUB,
     OP_MUL,
     OP_DIV,
+    OP_MOD,
     OP_LT,
     OP_GT,
     OP_LE,
     OP_GE,
     OP_EQ,
-    OP_NE
+    OP_NE,
+    OP_AND,
+    OP_OR,
+    OP_NEG,
+    OP_NOT
 } Operator;
 
 typedef struct AstExpr AstExpr;
@@ -48,6 +56,10 @@ struct AstExpr {
             Operator op;
             AstExpr *right;
         } binary;
+        struct {
+            Operator op;
+            AstExpr *operand;
+        } unary;
         struct {
             char *name;
         } identifier;
@@ -111,6 +123,7 @@ AstExpr *ast_literal(const char *v);
 AstExpr *ast_string_literal(const char *v);
 AstExpr *ast_identifier(const char *n);
 AstExpr *ast_binary(AstExpr *l, Operator op, AstExpr *r);
+AstExpr *ast_unary(Operator op, AstExpr *operand);
 AstExpr *ast_call(const char *name, AstExpr **args, int arg_count);
 
 AstStmt *ast_expr_stmt(AstExpr *e);
@@ -120,6 +133,8 @@ AstStmt *ast_return(AstExpr *expr);
 AstStmt *ast_func_def(const char *name, char **params, int param_count, AstStmt **body, int body_count);
 AstStmt *ast_if(AstExpr *cond, AstStmt **then_body, int then_count, AstStmt **else_body, int else_count);
 AstStmt *ast_while(AstExpr *cond, AstStmt **body, int body_count);
+AstStmt *ast_break(void);
+AstStmt *ast_continue(void);
 AstStmt *ast_block(AstStmt **stmts, int stmt_count);
 
 void ast_free_expr(AstExpr *e);

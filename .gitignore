@@ -8,3 +8,5 @@ __sequoia_bin
 __sequoia_out.c
 
 *.log
+
+wiki
