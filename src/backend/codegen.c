@@ -159,6 +159,66 @@ static void gen_call(AstExpr *expr, FILE *out, Scope *scope, const char *dest_va
         return;
     }
 
+    if (strcmp(expr->data.call.name, "rng") == 0) {
+        if (expr->data.call.arg_count == 0) {
+            emit_indent(out, indent);
+            fprintf(out, "%s = rand();\n", dest_var);
+            return;
+        }
+
+        if (expr->data.call.arg_count == 1 || expr->data.call.arg_count == 2) {
+            char min_var[32];
+            char max_var[32];
+            char span_var[32];
+
+            next_temp(min_var, sizeof(min_var));
+            next_temp(max_var, sizeof(max_var));
+            next_temp(span_var, sizeof(span_var));
+
+            emit_decl(out, scope, min_var, indent);
+            emit_decl(out, scope, max_var, indent);
+            emit_decl(out, scope, span_var, indent);
+
+            if (expr->data.call.arg_count == 1) {
+                emit_indent(out, indent);
+                fprintf(out, "%s = 0;\n", min_var);
+                gen_expr(expr->data.call.args[0], out, scope, max_var, indent);
+            } else {
+                gen_expr(expr->data.call.args[0], out, scope, min_var, indent);
+                gen_expr(expr->data.call.args[1], out, scope, max_var, indent);
+            }
+
+            emit_indent(out, indent);
+            fprintf(out, "if (%s > %s) {\n", min_var, max_var);
+            emit_indent(out, indent + 1);
+            fprintf(out, "%s = %s;\n", span_var, min_var);
+            emit_indent(out, indent + 1);
+            fprintf(out, "%s = %s;\n", min_var, max_var);
+            emit_indent(out, indent + 1);
+            fprintf(out, "%s = %s;\n", max_var, span_var);
+            emit_indent(out, indent);
+            fputs("}\n", out);
+
+            emit_indent(out, indent);
+            fprintf(out, "%s = %s - %s + 1;\n", span_var, max_var, min_var);
+            emit_indent(out, indent);
+            fprintf(out, "if (%s <= 0) {\n", span_var);
+            emit_indent(out, indent + 1);
+            fprintf(out, "%s = %s;\n", dest_var, min_var);
+            emit_indent(out, indent);
+            fputs("} else {\n", out);
+            emit_indent(out, indent + 1);
+            fprintf(out, "%s = %s + (rand() %% %s);\n", dest_var, min_var, span_var);
+            emit_indent(out, indent);
+            fputs("}\n", out);
+            return;
+        }
+
+        emit_indent(out, indent);
+        fprintf(out, "%s = 0;\n", dest_var);
+        return;
+    }
+
     for (int i = 0; i < expr->data.call.arg_count; i++) {
         char arg_var[32];
         next_temp(arg_var, sizeof(arg_var));
@@ -386,7 +446,9 @@ void generate(Program *prog) {
         return;
     }
 
-    fprintf(out, "#include <stdio.h>\n\n");
+    fprintf(out, "#include <stdio.h>\n");
+    fprintf(out, "#include <stdlib.h>\n");
+    fprintf(out, "#include <time.h>\n\n");
 
     temp_counter = 0;
 
@@ -400,6 +462,9 @@ void generate(Program *prog) {
 
     Scope main_scope;
     scope_init(&main_scope);
+
+    emit_indent(out, 1);
+    fputs("srand((unsigned int)time(NULL));\n", out);
 
     for (int i = 0; i < prog->count; i++) {
         if (prog->stmts[i]->kind != STMT_FUNC_DEF) {
