@@ -36,18 +36,18 @@ Token next_token(Lexer *l) {
     
     if (peek(l) == '/' && l->src[l->pos + 1] == '/') {
         while (peek(l) != '\n' && peek(l) != '\0') advance(l);
-        return next_token(l);  // Recursively get next token
+        return next_token(l);
     }
   
     if (peek(l) == '/' && l->src[l->pos + 1] == '*') {
-        advance(l);  // /
-        advance(l);  // *
+        advance(l);
+        advance(l);
         while (!(peek(l) == '*' && l->src[l->pos + 1] == '/') && peek(l) != '\0') {
             advance(l);
         }
         if (peek(l) == '*') {
-            advance(l);  // *
-            advance(l);  // /
+            advance(l);
+            advance(l);
         }
         return next_token(l); 
     }
