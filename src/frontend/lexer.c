@@ -33,20 +33,20 @@ Token next_token(Lexer *l) {
     
     if (peek(l) == '/' && l->src[l->pos + 1] == '/') {
         while (peek(l) != '\n' && peek(l) != '\0') advance(l);
-        return next_token(l);
+        return next_token(l);  // Recursively get next token
     }
-    
+  
     if (peek(l) == '/' && l->src[l->pos + 1] == '*') {
-        advance(l);
-        advance(l);
+        advance(l);  // /
+        advance(l);  // *
         while (!(peek(l) == '*' && l->src[l->pos + 1] == '/') && peek(l) != '\0') {
             advance(l);
         }
         if (peek(l) == '*') {
-            advance(l);
-            advance(l);
+            advance(l);  // *
+            advance(l);  // /
         }
-        return next_token(l);
+        return next_token(l); 
     }
 
     char c = peek(l);
@@ -60,15 +60,15 @@ Token next_token(Lexer *l) {
     }
 
     if (c == '"') {
-        advance(l);
+        advance(l); 
         int start = l->pos;
         while (peek(l) != '"' && peek(l) != '\0') {
-            if (peek(l) == '\\') advance(l);
+            if (peek(l) == '\\') advance(l); 
             advance(l);
         }
         int len = l->pos - start;
         char *buf = strndup(l->src + start, len);
-        if (peek(l) == '"') advance(l);
+        if (peek(l) == '"') advance(l); 
         return make(TOK_STRING, buf);
     }
 
@@ -119,7 +119,7 @@ Token next_token(Lexer *l) {
                 advance(l);
                 return make(TOK_NE, "!=");
             }
-            return make(TOK_EOF, "");
+            return make(TOK_EOF, ""); 
         case '\0': return make(TOK_EOF, "");
         default: advance(l); return make(TOK_EOF, "");
     }
