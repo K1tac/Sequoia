@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sequoia</title>
+    <meta name="description" content="Sequoia is a small custom programming language implemented in C that compiles Sequoia source into C and then into a native executable.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="shell">
+            <a class="brand" href="#top">Sequoia</a>
+            <nav class="site-nav" aria-label="Primary">
+                <a href="#language">Language</a>
+                <a href="#builtins">Builtins</a>
+                <a href="#example">Example</a>
+                <a href="#publish">Publish</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="top">
+        <section class="hero">
+            <div class="shell hero-layout">
+                <div class="hero-copy">
+                    <p class="eyebrow">Custom Language -> C -> Native Binary</p>
+                    <h1>Sequoia</h1>
+                    <p class="lede">
+                        A small custom programming language implemented in C. Sequoia compiles
+                        `.seq` source into C, builds it with `gcc`, and runs the result.
+                    </p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="#example">See the Guesser</a>
+                        <a class="button button-secondary" href="#publish">Host on GitHub</a>
+                    </div>
+                    <ul class="hero-facts">
+                        <li>Integer-first syntax for small programs</li>
+                        <li>Functions, conditionals, `print`, `input`, and `rng`</li>
+                        <li>Interactive examples already live in the repo</li>
+                    </ul>
+                </div>
+
+                <figure class="hero-visual">
+                    <img src="assets/sequoia-hero.png" alt="Stylized Sequoia code sample shown in a terminal-like frame">
+                </figure>
+            </div>
+        </section>
+
+        <section class="section section-dark">
+            <div class="shell overview-grid">
+                <div>
+                    <p class="section-label">Why it exists</p>
+                    <h2>Readable compiler pipeline, small enough to learn from</h2>
+                </div>
+                <div class="pipeline" aria-label="Compilation pipeline">
+                    <div class="pipeline-step">
+                        <span class="pipeline-title">1. Parse</span>
+                        <p>Lexer and parser turn `.seq` source into an AST.</p>
+                    </div>
+                    <div class="pipeline-step">
+                        <span class="pipeline-title">2. Optimize</span>
+                        <p>Constant folding trims simple arithmetic before code generation.</p>
+                    </div>
+                    <div class="pipeline-step">
+                        <span class="pipeline-title">3. Generate</span>
+                        <p>Sequoia emits C, compiles with `gcc`, and executes the binary.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="language">
+            <div class="shell">
+                <div class="section-heading">
+                    <p class="section-label">Language</p>
+                    <h2>Small surface area, enough room for real programs</h2>
+                    <p>
+                        Sequoia is intentionally compact. Today it focuses on integer math,
+                        assignment, functions, conditionals, console output, user input, and
+                        a built-in random number generator.
+                    </p>
+                </div>
+
+                <div class="feature-grid">
+                    <article class="feature-card">
+                        <h3>Expressions</h3>
+                        <p>`+`, `-`, `*`, `/` plus comparison operators like `==`, `&lt;=`, and `!=`.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3>Functions</h3>
+                        <p>Named functions accept integer parameters and return integer values.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3>Conditionals</h3>
+                        <p>`if` / `else` blocks make recursion and branching possible today.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3>Console I/O</h3>
+                        <p>`print` mixes strings and values, while `input(...)` reads integers.</p>
+                    </article>
+                </div>
+
+                <div class="code-layout">
+                    <article class="code-panel">
+                        <div class="panel-label">Syntax Snapshot</div>
+<pre><code>func square(x) {
+    return x * x;
+}
+
+value = rng(1, 10);
+guess = input("Your guess: ");
+
+if (guess == value) {
+    print "Nice job!";
+} else {
+    print "The number was " value;
+}</code></pre>
+                    </article>
+
+                    <article class="code-panel">
+                        <div class="panel-label">Run It</div>
+<pre><code>make
+./sequoia tests/testprogram.seq
+./sequoia tests/guessergame.seq</code></pre>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section-tint" id="builtins">
+            <div class="shell">
+                <div class="section-heading compact">
+                    <p class="section-label">Builtins</p>
+                    <h2>The current standard kit</h2>
+                </div>
+
+                <div class="builtin-grid">
+                    <article class="builtin-card">
+                        <h3><code>input()</code></h3>
+                        <p>Reads one integer from standard input. `input("Prompt: ")` prints a prompt first.</p>
+                    </article>
+                    <article class="builtin-card">
+                        <h3><code>rng()</code></h3>
+                        <p>Returns a raw random integer from C's `rand()` after startup seeding.</p>
+                    </article>
+                    <article class="builtin-card">
+                        <h3><code>rng(max)</code></h3>
+                        <p>Returns a value from `0` to `max`, inclusive.</p>
+                    </article>
+                    <article class="builtin-card">
+                        <h3><code>rng(min, max)</code></h3>
+                        <p>Returns a value from `min` to `max`, inclusive, swapping bounds if needed.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="example">
+            <div class="shell example-layout">
+                <div class="section-heading compact">
+                    <p class="section-label">Example</p>
+                    <h2>Random number guesser</h2>
+                    <p>
+                        The repo now includes a playable Sequoia guessing game that uses `rng`,
+                        `input`, comparison operators, and recursion in place of loops.
+                    </p>
+                </div>
+
+                <article class="code-panel large">
+                    <div class="panel-label">tests/guessergame.seq</div>
+<pre><code>func play(secret, attempts) {
+    guess = input("Guess a number between 1 and 10: ");
+
+    if (guess == 0) {
+        print "Game ended.";
+        return 0;
+    }
+
+    if (guess == secret) {
+        print "You got it in " attempts " tries!";
+        return 0;
+    }
+
+    if (guess &lt; secret) {
+        print "Too low.";
+    } else {
+        print "Too high.";
+    }
+
+    return play(secret, attempts + 1);
+}
+
+print "=== Number Guesser ===";
+print "I'm thinking of a number between 1 and 10.";
+print "Enter 0 to quit.";
+
+secret = rng(1, 10);
+game_status = play(secret, 1);</code></pre>
+                </article>
+            </div>
+        </section>
+
+        <section class="section section-dark" id="publish">
+            <div class="shell publish-layout">
+                <div>
+                    <p class="section-label">Publish</p>
+                    <h2>Ready for GitHub Pages</h2>
+                    <p>
+                        This site is static and lives in the repo's `docs/` folder, which works
+                        well with GitHub Pages. Point Pages at `docs/` on your default branch and
+                        it should publish cleanly.
+                    </p>
+                </div>
+
+                <article class="publish-note">
+                    <div class="panel-label">Suggested setup</div>
+<pre><code>Repository Settings
+-> Pages
+-> Build and deployment: Deploy from a branch
+-> Branch: main
+-> Folder: /docs</code></pre>
+                </article>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
